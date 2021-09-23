@@ -1,3 +1,5 @@
+<?php require_once("connection.php"); ?>
+
 <!DOCTYPE html>
 <html lang="lt">
 <head>
@@ -14,11 +16,9 @@
     <div class="container">
         <?php require_once("design-parts/meniu.php"); ?>
         <?php require_once("design-parts/jumbotron.php"); ?>
-        <?php showJumbotron("Blogpost", "Sveiki atvykę"); ?>
+        <?php showJumbotron("Bloga's", "Sveiki atvykę į puslapį"); ?>
         <?php require_once("design-parts/main.php"); ?>
     </div>
-
-
     
 </body>
 </html>
@@ -31,14 +31,14 @@
 //2. Naudojantis Bootstrap elementais: 
     //navbar, jumbotron, cards atvaizduoti puslapius(gali būti identiškai kaip paskaitoje)+
 //3. Susikurti kategorijosSeed.php failą, kuris sugeneruoja 10 kategorijų.+
-//4. Prie sistemos prijungti vartotojų prisijungimą.
+//4. Prie sistemos prijungti vartotojų prisijungimą.+
 
-//Puslapius gali pasiekti tik prisijungę vartotojai.
-//Vartotojo tipai 2: skaitytojas, administratorius.
+//Puslapius gali pasiekti tik prisijungę vartotojai.// nepadaryta
+//Vartotojo tipai 2: skaitytojas, administratorius.// reikia sukurti DB
 
-//5. Administratorius prie kiekvieno puslapio kortelės turi matyti mygtuką "Edit". 
-    //Pvz: http://prntscr.com/1sogdxw
-//6. Paspaudus mygtuką "Edit" administratoriui atsidaro puslapio redagavimo forma.
+//5. Administratorius prie kiekvieno puslapio kortelės turi matyti mygtuką "Edit". +
+    //Pvz: http://prntscr.com/1sogdxw // pridetas kitoks mygtukas
+//6. Paspaudus mygtuką "Edit" administratoriui atsidaro puslapio redagavimo forma.// dar nepadaryta
 //7. "Santrauka" bei "Turinys" turi būti redaguojamas su SummerNote papildiniu.
 //8. Redagavimo formos neturi pasiekti neprisijungęs vartotojas bei skaitytojas.
 ?>

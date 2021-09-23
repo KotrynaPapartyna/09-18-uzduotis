@@ -1,18 +1,21 @@
-
 <?php require_once("connection.php"); ?>
 
 <?php
 
-$url = $_GET["href"]; 
+// sis php atsakingas uz kiekvieno puslapio atvaizdavima
 
-$sql = "SELECT * FROM kategorijos 
+$url = $_GET["href"]; // kontaktai , apie-mus, paslaugos
+
+$sql = "SELECT * FROM puslapiai 
 WHERE nuoroda='$url'";
 
 $result = $conn->query($sql);
 
+//uzklausa grazina viena irasa is duomenu bazes
 if($result->num_rows != 0) {
-    $page = mysqli_fetch_array($result); 
-    header("Location:404.php");  
+    $page = mysqli_fetch_array($result); // informacija patalpinama/paverciama i masyva 
+} else {
+    header("Location:404.php"); // parodo kad puslapio nera 
 }
 
 ?>
@@ -29,15 +32,14 @@ if($result->num_rows != 0) {
     <?php require_once("includes.php"); ?>
 </head>
 <body>
-
     <div class="container">
         <?php require_once("design-parts/meniu.php"); ?>
         <?php require_once("design-parts/jumbotron.php"); ?>
 
-        <?php showJumbotron($page["pavadinimas"], $page["aprasymas"]); ?>
+        <?php showJumbotron($page["pavadinimas"], $page["santrauka"]); ?>
 
-        
-        <?php echo $page["tevinis_id"]; ?>
+        <?php echo $page["turinys"]; ?>
+        <?php echo $page["kategorijos_id"]; ?>
      </div>
     
 </body>
