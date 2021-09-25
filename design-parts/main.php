@@ -1,67 +1,45 @@
 <?php require_once("connections.php"); ?>
 
+<?php 
 
+$sql = "SELECT reiksme FROM nustatymai WHERE ID = 1 "; // 1 irasas
+$result = $conn->query($sql);
+$selected_value = mysqli_fetch_array($result);
+
+// 0 reiks kad sidebar neatvaizduojamas
+        // 1 reiks kad sidebar yra kaireje puseje
+        // 2 reiks kad sidebar yra desineje puseje
+
+?>
 
 <div class="row">
-    <div class="col-lg-3 sidebar">
-        <h3>KATEGORIJOS</h3>
-    <?php 
-        $sql = "SELECT * FROM kategorijos
-        ORDER BY pavadinimas ASC
-        ";
-
-        $result = $conn->query($sql);
-
-        echo "<ul>";
-
-        while($category = mysqli_fetch_array($result)) {
-           //kiek kategorija turi irasu?
-           // atlikti uzklausa i puslapiai duomenu bazes lenteleje
-           
-           //kategorijos ID. $catID - jis ateina is nuorodos
-           
-           $categoryID = $category["ID"];
-           
-           $sql1 = "SELECT COUNT(ID) 
-           AS viso_irasu 
-           FROM `puslapiai` 
-           WHERE kategorijos_id = $categoryID "; //10
-
-           $result1 = $conn->query($sql1);
-           
-           $totalPages = mysqli_fetch_array($result1); //masyva su skaiciumi kiek yra is viso puslapiu
-
-        //    var_dump($totalPages);
-
-        //    echo $totalPages[0];
-        //    echo "<br>";
-        //    echo $totalPages["viso_irasu"];
-           //KIek irasu grazina sita uzklausa?  $sql1. 1
 
 
-           echo "<li>";
-
-                echo "<a href='index.php?catID=".$categoryID."'>";
-                    echo $category["pavadinimas"]." (".$totalPages["viso_irasu"].")" ;
-                echo "</a>";
-           echo "</li>";
-        }
-
-        echo "</ul>"
-    ?>
-
-    </div>
-    <div class="col-lg-9">
+    <?php if ($selected_value[0] == 1) {
+        require("sidebar.php");
+    } ?>
+    
+    <?php if($selected_value[0] == 0) { ?>
+        <div class="col-lg-12">
+    <?php } else {?>
+        <div class="col-lg-9">
+    <?php } ?>
         <div class="row">
         <?php 
 
             if(isset($_GET["catID"]) && !empty($_GET["catID"])) { //egzistuoja
                 $catID = $_GET["catID"];
                 
-                $sql = "SELECT * FROM puslapiai
-                WHERE kategorijos_id = $catID
-                ORDER BY puslapiai.ID DESC
-                ";
+                $sql = "SELECT puslapiai.pavadinimas, 
+                puslapiai.nuoroda, 
+                puslapiai.santrauka, 
+                kategorijos.pavadinimas AS kategorijos_pavadinimas,
+                kategorijos.ID
+                FROM puslapiai 
+                LEFT JOIN kategorijos
+                ON puslapiai.kategorijos_id = kategorijos.ID
+                WHERE puslapiai.kategorijos_id = $catID
+                ORDER BY puslapiai.ID DESC";    
             } else {
                 $sql = "SELECT puslapiai.pavadinimas, 
                 puslapiai.nuoroda, 
@@ -86,7 +64,7 @@
                     <p class="catd-text"><a  href="index.php?catID=<?php echo $pages["ID"] ?>" ><?php echo $pages["pavadinimas"]; ?></a>  </p>
                     <div class="card-footer bg-transparent border-success"></div>
                     <a href="puslapiai.php?href=<?php echo $pages["nuoroda"]; ?>" class="btn btn-primary">Į puslapį</a>
-                    <a href="edit.php?href=<?php echo $pages["nuoroda"]; ?>" class="btn btn-success">Redaguoti</a>
+                    <a href="redagavimas.php?href=<?php echo $pages["nuoroda"]; ?>" class="btn btn-success">Redaguoti</a>
                 </div>
             </div>
 

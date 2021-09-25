@@ -1,16 +1,20 @@
+<!--- ROBERTO DALIS--->
+<!-- adatptuotas dar reikia pakoreguoti-->
+
+<?php require_once("includes.php"); ?>
+
 <?php 
-    require_once("connection.php");
+require_once('connection.php');
 ?>
+
 <!DOCTYPE html>
 <html lang="lt">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>Prisijungimas</title>
-
-    <?php require_once("includes.php"); ?>
-
     <style>
         h1 {
             text-align: center;
@@ -23,63 +27,98 @@
             transform: translateY(-50%) translateX(-50%);
         }
     </style>
+
 </head>
-<body>
-    <?php
+<?php
+if (isset($_POST["vardas"]) && !empty($_POST["vardas"]) 
+    && isset($_POST["password"]) && !empty($_POST["password"]) )
+{
+$vardas = $_POST["vardas"];
+$password = $_POST["password"];
+
+$sql = "SELECT * FROM `adminas` 
+        WHERE `vardas` = '$vardas' AND `slaptazodis` = '$password' ";
+
+$result = $conn->query($sql);
+
+if($result->num_rows == 1)  {
+  
+    $user_info = mysqli_fetch_array($result);
+    $cookie_array = array(
+        $user_info["ID"],
+        //$user_info["slapyvardis"],
+        $user_info["vardas"],
+        $user_info["teises_id"],
+        //$user_info['registracija'],
+        
+                
+    );
+     
+   
+    $cookie_array = implode("|", $cookie_array);
+    setcookie("prisijungti",  $cookie_array, time() + 3600 * 24, "/");
+    $teises_id = intval($user_info['teises_id']);
+    $vardas = $user_info['vardas'];
+    $slaptazodis = $user_info['slaptazodis'];
+    $data = date("Y.m.d");
+    $id = $user_info["ID"];
+    //$registracija = $user_info['registracija'];
+
+    $sql = "UPDATE `vartotojai`
+    SET `paskutinis_prisijungimas` = '$data'
+    WHERE ID = $id";
+    $result = $conn->query($sql);
+
     
-        if(isset($_POST["submit"])) {
-            if(isset($_POST["slapyvardis"]) && isset($_POST["slaptazodis"]) 
-            && !empty($_POST["slapyvardis"]) && !empty($_POST["slaptazodis"])) {
-                $username = $_POST["slapyvardis"];
-                $password = $_POST["slaptazodis"];
+    
 
-                $sql = "SELECT * FROM `uzsiregistrave vartotojai` 
-                    WHERE slapyvardis='$username' AND slaptazodis='$password'"; 
+    if($teises_id == 1) {
+      header('Location: admin.php');       
+    }
+   
+    if($teises_id == 2) {
+       header('Location: index.php');
+    }
+ 
 
-                $result = $conn->query($sql);
-                
-                if($result->num_rows == 1) {
+    if($registracija == 1) {
+        header("Location: 404.php");
+        
+    }
+  
 
-                    $user_info = mysqli_fetch_array($result);
-                    
-                    $cookie_array = array(
-                        $user_info["ID"],
-                        $user_info["slapyvardis"],
-                        $user_info["slaptazodis"],
-                        $user_info["teises_id"]
-                    );
+} else {
+    // grazina/ nukreipia i prisijungimo langa jeigu fuomenys neteisingi
+    header('login.php');
+    $message = "Neteisingi prisijungimo duomenys";
+} 
+}
 
-                    $cookie_array = implode("|", $cookie_array);
-                    setcookie("prisijungta", $cookie_array, time() + 3600, "/");
+?>
+<body>
 
-                    header("Location: puslapiai.php");
-                } else {
-                    $message = "Neteisingi prisijungimo duomenys";
-                }
-                
-            } else {
-                $message = "Laukeliai yra tušti arba duomenys yra neteisingi";
-            }
-        }    
+<?php if(!isset($_COOKIE["prisijungti"])) { ?>
 
-    ?>
-
-    <?php if(!isset($_COOKIE["prisijungta"])) { ?>
-    <div class="container">
-        <h1>Prisijungimas</h1>
-        <form action="index.php" method="post">
-            <div class="form-group">
-                <label for="username">Slapyvardis</label>
-                <input class="form-control" type="text" name="username" />
+<div class='container'>
+     <h1>Prisijungimas</h1>
+        <form action='login.php' method='post'>
+            <div class='form-group'>
+                    <label for='vardas'>Vardas</label>
+                    <input class="form-control" placeholder='Jūsų prisijungimo vardas' type='text' id='vardas' name='vardas' />
             </div>
             <div class="form-group">
                 <label for="password">Slaptažodis</label>
-                <input class="form-control" type="password" name="password" />
+                <input class="form-control" placeholder='Slaptažodis' type="password" name="password" />
             </div>
             
-            <button class="btn btn-primary" type="submit" name="submit">Prisijungti</button>
-        </form>
-
+                    <button class='btn btn-success' type='submit' name='submit'>Prisijungti</button> 
+                               
+                                                  
+            </form>        
+            
+           
+        
+        
         <?php if(isset($message)) { ?>
             <div class="alert alert-danger" role="alert">
                 <?php echo $message; ?>
@@ -87,8 +126,19 @@
         <?php } ?>
     </div>
     <?php } else {
-        header("Location: puslapiai.php");
+        header("Location: index.php");
     } ?>
 
+
+</div>
+
+ 
+   
+
+    
+    
+    
+    
+    
 </body>
 </html>
