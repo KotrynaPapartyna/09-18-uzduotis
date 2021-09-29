@@ -1,4 +1,4 @@
-<?php require_once("connections.php"); ?>
+<?php require_once("connection.php"); ?>
 
 <?php 
 

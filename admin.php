@@ -1,4 +1,3 @@
-
 <?php require("connection.php"); ?>
 <?php require("functions.php"); ?>
 <!DOCTYPE html>
@@ -11,6 +10,9 @@
     <?php require("includes.php"); ?>
 </head>
 <body>
+
+
+
 <div class="container">
         <?php require("design-parts/meniu.php"); ?>
         <?php require("design-parts/jumbotron.php"); ?>
@@ -77,6 +79,7 @@
                     <th>Pavadinimas</th>
                     <th>Aprasymas</th>
                     <th>Rodyti</th>
+                    <th>Redaguoti</th>
                 </tr>
             <?php
             $sql = "SELECT * FROM kategorijos"; //kuri kategorija yra tevine/ kuri vaikine
@@ -88,6 +91,7 @@
                     echo "<td>".$category["ID"]."</td>";
                     echo "<td>".$category["pavadinimas"]."</td>";
                     echo "<td>".$category["aprasymas"]."</td>";
+                       
 
                     if($category["rodyti"] == 0) {
                         echo "<td>
@@ -98,7 +102,7 @@
                         </td>";
                         
                     }
-
+                echo "<td><a href='redagavimas.php?ID=".$category["ID"]."'>Redaguoti</a></td>";
                     
                 echo "</tr>";
 
@@ -138,20 +142,3 @@
 </html>
 
 
-
-
-
-
-<?php 
-
-//1. Sonines juostos atvaizdavimas
-// Sonine juosta kaireje puseje
-// Sonine juosta desineje puseje
-// Sonines juostos neatvaizduoti
-
-//2. Kategoriju matomumas
-// Kad mes galetume pasirinkti, kurias kategorijas norime matyti, kuriu ne
-
-
-
-?>

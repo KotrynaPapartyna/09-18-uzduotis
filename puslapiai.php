@@ -38,7 +38,8 @@ if($result->num_rows != 0) {
 
         <?php showJumbotron($page["pavadinimas"], $page["santrauka"]); ?>
 
-        <?php echo $page["turinys"]; ?>
+
+        <?php echo $page["santrauka"]; ?>
         <?php echo $page["kategorijos_id"]; ?>
      </div>
     

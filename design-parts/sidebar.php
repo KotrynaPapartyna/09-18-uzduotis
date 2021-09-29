@@ -4,7 +4,7 @@
 
 function kategorijuMedis($tevinis_id = 0, $kategorijos_medis_masyvas = '') {
 
-    require("connections.php"); 
+    require("connection.php"); 
 
     if(!is_array($kategorijos_medis_masyvas)) {
         $kategorijos_medis_masyvas = array();
